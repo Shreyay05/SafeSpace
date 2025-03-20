@@ -1,58 +1,173 @@
+body, html {
+  height: 100%;
+  overflow: hidden;
+}
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .dashboard-header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .dashboard-header h1 {
-    color: rgb(36, 1, 62);
-    font-size: 2.5rem;
-    margin-bottom: 5px;
-  }
-  
-  .dashboard-header p {
-    color: #666;
-    font-size: 1.2rem;
-  }
-  
-  .dashboard-content {
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .dashboard-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-card h2 {
-    color: rgb(36, 1, 62);
-    margin-bottom: 20px;
-  }
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+              url('/assets/user.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+}
 
-  .logout-btn {
-    margin-top: 20px;
-    padding: 10px 25px;
-    background-color: rgb(36, 1, 62);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
+.dashboard-logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.logo-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.logo-icon span {
+  color: #584c58;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dashboard-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.quote-container {
+  text-align: center;
+  max-width: 700px;
+  margin-bottom: 40px;
+}
+
+.quote {
+  font-size: 40px;
+  line-height: 1.3;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+.flower-icon {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.feeling-btn, .session-btn {
+  background-color: rgba(170, 148, 172, 0.85);
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  width: 300px;
+  text-align: center;
+}
+
+.feeling-btn:hover, .session-btn:hover {
+  background-color: rgba(170, 148, 172, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 10px 20px;
+  margin-top: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.mood-tracker {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  color: #333;
+  position: absolute;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.mood-tracker h3 {
+  margin-top: 0;
+  color: #584c58;
+}
+
+.mood-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.mood {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mood:hover {
+  background-color: #e0e0e0;
+}
+
+.close-btn {
+  background-color: #584c58;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .quote {
+    font-size: 28px;
   }
   
-  .logout-btn:hover {
-    background-color: rgb(28, 1, 28);
+  .action-buttons {
+    width: 100%;
   }
+  
+  .feeling-btn, .session-btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
