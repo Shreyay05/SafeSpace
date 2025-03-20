@@ -1,42 +1,90 @@
-import React, { useState} from 'react'
-import './Dashboard.css'
-const Dashboard = ({onNavigate}) => {
-    const[feeling,setFeeling]= useState('');
+import React, { useState } from 'react';
+import './Dashboard.css';
+import wallpaper from '../Assets/wallpaper.png'; // Ensure the path is correct
+
+const Dashboard = ({ onNavigate }) => {
+    const [sidebarVisible, setSidebarVisible] = useState(true);
+    
     const quotes = [
         "Healing takes time, and asking for help is a courageous step toward it.",
-    "Your journey matters. Take each moment as it comes.",
-    "Peace begins with patience and self-compassion.",
-    "The path to wellness is not linear, but it is always worth taking."
+        "Your journey matters. Take each moment as it comes.",
+        "Peace begins with patience and self-compassion.",
+        "The path to wellness is not linear, but it is always worth taking."
     ];
-    const randomQuote=quotes[Math.floor(Math.random() * quotes.length)];
+    
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    
+    const toggleSidebar = () => {
+        setSidebarVisible(!sidebarVisible);
+    };
+    
     return (
-        <div className="dashboard-container">
-            <div className='dashboard-logo'>
-                <div className='logo-icon'>
-                 <span> <img src='/favicon.ico' alt='safespace logo' style={{ width: '24px', height: '24px' }}/> </span>
-                </div>
-            </div>
-            <div className="dashboard-content">
-                <div className="quote-container">
-                    <p className='quote'>"{randomQuote}"</p>
-                </div>
-                <div className='action-buttons'>
-                    <button className='feeling-btn' 
-                        onClick={()=>{
-                            setFeeling(true);
-                            window.alert("coming soon");
-                            }}>
-                        How are you feeling today? →
-                    </button>
-                    <button className='session-btn' onClick={()=>window.alert("TO DO!")}>
-                        Book a session →
-                    </button>
-                </div>
-            <button className='logout-btn' onClick={onNavigate}>
-                Logout
+        <div
+            className="dashboard-container"
+            style={{
+                backgroundImage: `url(${wallpaper})`
+            }}
+        >
+            {/* Toggle Button */}
+            <button 
+                className="sidebar-toggle" 
+                onClick={toggleSidebar}
+            >
+                {sidebarVisible ? '◀ Hide' : '▶ Show'}
             </button>
+            
+            {/* Sidebar - only render if visible */}
+            {sidebarVisible && (
+                <div className="sidebar">
+                    <div className="sidebar-logo">
+                        <img src="/favicon.ico" alt="Logo" className="sidebar-logo-img" />
+                        <span>SafeSpace</span>
+                    </div>
+                    <ul className="sidebar-links">
+                        <li onClick={() => alert("Home Clicked")}>Home <span className="nav-arrow">→</span></li>
+                        <li onClick={() => alert("Feelings Clicked")}>How Are You Feeling <span className="nav-arrow">→</span></li>
+                        <li onClick={() => alert("Session Clicked")}>Book a Session <span className="nav-arrow">→</span></li>
+                        <li onClick={() => alert("Profile Clicked")}>My Profile <span className="nav-arrow">→</span></li>
+                    </ul>
+                </div>
+            )}
+            
+            {/* Main content */}
+            <div className={`main-content ${!sidebarVisible ? 'full-width' : ''}`}>
+                {/* Logo */}
+                <div className="dashboard-logo">
+                    <img src="/favicon.ico" alt="SafeSpace Logo" className="logo-img" />
+                    <div className="logo-text">
+                        <p>SafeSpace</p>
+                        <span>YOUR MIND MATTERS</span>
+                    </div>
+                </div>
+                
+                {/* Quote */}
+                <div className="quote-container">
+                    <p className="quote">
+                        "{randomQuote}" <span className="flower-icon">🌼</span>
+                    </p>
+                </div>
+                
+                {/* Buttons */}
+                <div className="action-buttons">
+                    <button 
+                        className="feeling-btn" 
+                        onClick={() => alert("Coming soon!")}
+                    >
+                        HOW ARE YOU FEELING TODAY? →
+                    </button>
+                    <button 
+                        className="session-btn" 
+                        onClick={() => alert("TO DO!")}
+                    >
+                        BOOK A SESSION NOW →
+                    </button>
+                </div>
             </div>
         </div>
-    )
-}
-export default Dashboard
+    );
+};
+
+export default Dashboard;
