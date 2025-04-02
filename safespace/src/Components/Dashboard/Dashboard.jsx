@@ -43,7 +43,7 @@ const Dashboard = ({ onNavigate }) => {
                     <ul className="sidebar-links">
                         <li onClick={() => alert("Home Clicked")}>Home <span className="nav-arrow">→</span></li>
                         <li onClick={() => alert("Feelings Clicked")}>How Are You Feeling <span className="nav-arrow">→</span></li>
-                        <li onClick={() => alert("Session Clicked")}>Book a Session <span className="nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate()}>Book a Session <span className="nav-arrow">→</span></li>
                         <li onClick={() => alert("Profile Clicked")}>My Profile <span className="nav-arrow">→</span></li>
                     </ul>
                 </div>
@@ -77,7 +77,7 @@ const Dashboard = ({ onNavigate }) => {
                     </button>
                     <button 
                         className="session-btn" 
-                        onClick={() => alert("TO DO!")}
+                        onClick={() => onNavigate()}
                     >
                         BOOK A SESSION NOW →
                     </button>
