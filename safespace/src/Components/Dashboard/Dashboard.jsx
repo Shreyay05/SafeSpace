@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import wallpaper from '../Assets/wallpaper.png'; // Ensure the path is correct
+import chatbotIcon from '../Assets/chatbot.png';
 
 const Dashboard = ({ onNavigate }) => {
     const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -24,7 +25,10 @@ const Dashboard = ({ onNavigate }) => {
             style={{
                 backgroundImage: `url(${wallpaper})`
             }}
-        >
+        >   {/* Chatbot Icon */}
+        <div className="chatbot-icon" onClick={() => onNavigate('chatbot')}>
+            <img src={chatbotIcon} alt="Chatbot" />
+        </div>
             {/* Toggle Button */}
             <button 
                 className="sidebar-toggle" 
@@ -42,8 +46,8 @@ const Dashboard = ({ onNavigate }) => {
                     </div>
                     <ul className="sidebar-links">
                         <li onClick={() => alert("Home Clicked")}>Home <span className="nav-arrow">→</span></li>
-                        <li onClick={() => alert("Feelings Clicked")}>How Are You Feeling <span className="nav-arrow">→</span></li>
-                        <li onClick={() => onNavigate()}>Book a Session <span className="nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate('feeling')}>How Are You Feeling <span className="nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate('booking')}>Book a Session <span className="nav-arrow">→</span></li>
                         <li onClick={() => alert("Profile Clicked")}>My Profile <span className="nav-arrow">→</span></li>
                     </ul>
                 </div>
@@ -69,15 +73,15 @@ const Dashboard = ({ onNavigate }) => {
                 
                 {/* Buttons */}
                 <div className="action-buttons">
-                    <button 
+                    <button
                         className="feeling-btn" 
-                        onClick={() => alert("Coming soon!")}
+                        onClick={() => onNavigate('feeling')}
                     >
-                        HOW ARE YOU FEELING TODAY? →
+                    HOW ARE YOU FEELING TODAY? →
                     </button>
                     <button 
                         className="session-btn" 
-                        onClick={() => onNavigate()}
+                        onClick={() => onNavigate('booking')}
                     >
                         BOOK A SESSION NOW →
                     </button>
