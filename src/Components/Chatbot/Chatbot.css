@@ -1,0 +1,50 @@
+.chatbot-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #f9f5ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  
+  .chatbot-title {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    color: #4a148c;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .chatbot-frame {
+    width: 90%;
+    max-width: 800px;
+    height: 600px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Floating back button */
+  .chatbot-back-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #e0c3fc;
+    color: #333;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .chatbot-back-button:hover {
+    background-color: #d1a4f7;
+    transform: scale(1.05);
+  }
+  
