@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Dashboard.css';
 import wallpaper from '../Assets/wallpaper.png'; // Ensure the path is correct
 import chatbotIcon from '../Assets/chatbot.png';
+import communityIcon from '../Assets/community.jpg';
 
 const Dashboard = ({ onNavigate }) => {
     const [sidebarVisible, setSidebarVisible] = useState(true);
@@ -25,7 +26,12 @@ const Dashboard = ({ onNavigate }) => {
             style={{
                 backgroundImage: `url(${wallpaper})`
             }}
-        >   {/* Chatbot Icon */}
+        >   
+        {/* Community Posts Icon */}
+        <div className="community-icon" onClick={() => onNavigate('community')}>
+            <img src={communityIcon} alt="Community" />
+        </div>
+        {/* Chatbot Icon */}
         <div className="chatbot-icon" onClick={() => onNavigate('chatbot')}>
             <img src={chatbotIcon} alt="Chatbot" />
         </div>

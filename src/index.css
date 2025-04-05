@@ -5,8 +5,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100 vh;
-  background: linear-gradient(rgb(4, 4, 94),rgb(55, 2, 55));
+  height: 100vh;
+  background: linear-gradient(rgb(4, 4, 94), rgb(55, 2, 55));
+  overflow: hidden; 
+}
+
+html, #root {
+  height: 100%;
+  overflow: hidden; 
 }
 
 code {
