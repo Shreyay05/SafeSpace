@@ -56,7 +56,8 @@ const Dashboard = ({ onNavigate }) => {
                         <li onClick={() => alert("Home Clicked")}>Home <span className="nav-arrow">→</span></li>
                         <li onClick={() => onNavigate('feeling')}>How Are You Feeling <span className="nav-arrow">→</span></li>
                         <li onClick={() => onNavigate('booking')}>Book a Session <span className="nav-arrow">→</span></li>
-                        <li onClick={() => alert("Profile Clicked")}>My Profile <span className="nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate('profile')}>My Profile <span className="nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate('emergency')}>🚨 Emergency Alert <span className="nav-arrow">→</span></li>
                     </ul>
                 </div>
             )}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Booking.css';
+import backgroundImage from '../Assets/background.png';
 
 const Booking = ({ onNavigate }) => {
     const [selectedTherapist, setSelectedTherapist] = useState(null);
@@ -86,7 +87,7 @@ const Booking = ({ onNavigate }) => {
     
     if (isConfirmed) {
         return (
-            <div className="booking-container">
+            <div className="booking-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="booking-sidebar">
                     <div className="booking-sidebar-logo">
                         <img src="/favicon.ico" alt="Logo" className="booking-sidebar-logo-img" />
@@ -95,7 +96,7 @@ const Booking = ({ onNavigate }) => {
                     <ul className="booking-sidebar-links">
                         <li onClick={handleBackToDashboard}>Home <span className="booking-nav-arrow">→</span></li>
                         <li onClick={handleNewBooking}>Book a Session <span className="booking-nav-arrow">→</span></li>
-                        <li onClick={() => alert("Profile Clicked")}>My Profile <span className="booking-nav-arrow">→</span></li>
+                        <li onClick={() => onNavigate('profile')}>My Profile <span className="nav-arrow">→</span></li>
                     </ul>
                 </div>
                 
@@ -131,7 +132,8 @@ const Booking = ({ onNavigate }) => {
                 <ul className="booking-sidebar-links">
                     <li onClick={handleBackToDashboard}>Home <span className="booking-nav-arrow">→</span></li>
                     <li onClick={handleNewBooking}>Book a Session <span className="booking-nav-arrow">→</span></li>
-                    <li onClick={() => alert("Profile Clicked")}>My Profile <span className="booking-nav-arrow">→</span></li>
+                    <li onClick={() => onNavigate('profile')}>My Profile <span className="booking-nav-arrow">→</span></li>
+
                 </ul>
             </div>
             

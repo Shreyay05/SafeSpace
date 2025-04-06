@@ -1,113 +1,104 @@
-body {
-    font-family: Arial, sans-serif;
-    background-image: url('../Assets/background.png'); /* Path to the image */
-    background-size: cover; /* Ensures the image covers the whole screen */
-    background-repeat: no-repeat; /* Prevents repeating */
-    background-position: center center; /* Centers the image */
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-}
-/* Title Section */
-.title-section {
-    text-align: center;
-    margin-bottom: 30px; /* Increased margin for better spacing */
+/* Make box-sizing consistent */
+* {
+  box-sizing: border-box;
 }
 
-.title {
-    font-size: 48px; /* Increased font size */
-    font-weight: bold;
-    color: rgb(36, 1, 62);
+.loginSignup {
+  background-image: url('../Assets/background.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px 0;
 }
 
-.tagline {
-    font-size: 18px;
-    color: #676767;
-    margin-top: 8px;
+.auth-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 90%;
+  max-width: 400px;
+  min-height: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: #000;
 }
 
-
-.container {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    margin-top: 100px;
-    background: rgba(255, 255, 255, 0.5); 
-    padding: 30px;
-    width: 400px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    backdrop-filter: blur(10px); 
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-
-.header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 9px;
-    width: 100%;
-    margin-top: 30px;
+.auth-container h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: bold;
+  position: relative;
 }
 
-.text {
-    color: rgb(28, 1, 28);
-    font-size: 32px;
-    font-weight: 700;
+.auth-container h3::after {
+  content: '';
+  width: 50px;
+  height: 2px;
+  background: #000;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.underline {
-    width: 61px;
-    height: 6px;
-    background: rgb(36, 1, 62);
-    border-radius: 9px;
+/* Input field with icon wrapper */
+.input-with-icon {
+  position: relative;
+  width: 100%;
 }
 
-.inputs {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
-.input {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 5px;
+.auth-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px; /* extra left padding for icon */
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: #000;
+  background-color: #fff;
 }
 
-.input img {
-    margin: 0 15px;
-    height: 18px; /* Reduced height */
-    width: 18px; /* Reduced width */
+.auth-btn {
+  width: 48%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.input input {
-    flex: 1;
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: black;
-    font-size: 16px;
+.auth-btn.signup {
+  background-color: #333;
+  color: #fff;
 }
 
-.forgot-password {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #797979;
-    text-align: center;
+.auth-btn.login {
+  background-color: #888;
+  color: #fff;
 }
 
-.forgot-password span {
-    color: rgb(36, 1, 62);
-    cursor: pointer;
-    font-weight: 600;
+.therapist-fields {
+  margin-top: 10px;
 }
 
 .submit-container {

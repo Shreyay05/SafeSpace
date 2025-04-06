@@ -1,0 +1,76 @@
+.profile-container {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.profile-card p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.edit-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.edit-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.edit-group input,
+.edit-group select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.edit-group span {
+  font-size: 16px;
+  margin-right: 5px;
+}
+
+.edit-btn,
+.save-btn,
+.bottom-dashboard-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.bottom-dashboard-btn {
+  background-color: #555;
+  color: white;
+  margin-top: 20px;
+}

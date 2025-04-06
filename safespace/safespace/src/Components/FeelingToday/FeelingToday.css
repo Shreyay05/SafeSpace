@@ -1,0 +1,137 @@
+.feeling-container {
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 4rem;
+  }
+  
+  /* Title */
+  .feeling-title {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #000;
+  }
+  
+  /* Mood grid layout */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    width: 100%;
+  }
+  
+  /* Mood card */
+  .mood-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mood-card:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Mood image */
+  .mood-image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Mood name */
+  .mood-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000;
+  }
+  
+  /* Selected mood section */
+  .selected-section {
+    max-width: 800px;
+    width: 100%;
+    padding: 2rem;
+  }
+  
+  .selected-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #000;
+  }
+  
+  .selected-section p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Activity box styling */
+  .activity-list li {
+    background-color: #e6d6f4; /* lilac */
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: background 0.2s ease;
+  }
+  
+  .activity-list li:hover {
+    background-color: #ddc6f4;
+  }
+  
+  /* Checkbox styling */
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  /* Thank-you message */
+  .thank-you {
+    margin-top: 2rem;
+    font-size: 1.4rem;
+    color: #4CAF50;
+    font-weight: bold;
+  }
+  
+  /* Back button */
+  .back-button {
+    margin-top: 3rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    background-color: transparent;
+    color: #555;
+    font-weight: bold;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .back-button:hover {
+    color: #333;
+    border-color: #999;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  
