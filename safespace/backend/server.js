@@ -371,7 +371,43 @@ app.get('/api/therapists', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    return res.json(results);
+    return res.json({
+      therapists: results
+    });
+  });
+});
+
+// Get therapist by ID
+app.get('/api/therapist/:therapistid', (req, res) => {
+  const { therapistid } = req.params;
+  
+  const query = `
+    SELECT 
+      therapistid,
+      userid,
+      Username,
+      Specialization,
+      YearsOfExperience,
+      consultation_fee
+    FROM 
+      therapists
+    WHERE 
+      therapistid = ?
+  `;
+  
+  db.query(query, [therapistid], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Therapist not found' });
+    }
+    
+    return res.json({
+      therapist: results[0]
+    });
   });
 });
 
@@ -489,57 +525,7 @@ app.get('/api/appointments/:userid', (req, res) => {
     return res.json(results);
   });
 });
-// Add this new endpoint to your server.js file after the other API endpoints
 
-// Get therapist by ID
-app.get('/api/therapist/:therapistid', (req, res) => {
-  const { therapistid } = req.params;
-  
-  const query = `
-    SELECT 
-      therapistid,
-      userid,
-      Username,
-      Specialization,
-      YearsOfExperience,
-      consultation_fee
-    FROM 
-      therapists
-    WHERE 
-      therapistid = ?
-  `;
-  
-  db.query(query, [therapistid], (err, results) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
-    
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Therapist not found' });
-    }
-    
-    return res.json({
-      therapist: results[0]
-    });
-  });
-});
-
-// Update the Get all therapists endpoint to use the correct table name
-app.get('/api/therapists', (req, res) => {
-  const query = 'SELECT * FROM therapists';
-  
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
-    
-    return res.json({
-      therapists: results
-    });
-  });
-});
 // Get user's prescriptions
 app.get('/api/prescriptions/:userid', (req, res) => {
   const { userid } = req.params;
@@ -572,7 +558,6 @@ app.get('/api/prescriptions/:userid', (req, res) => {
     });
   });
 });
-// Add these API endpoints to your server.js file
 
 // Get all community posts
 app.get('/api/community-posts', (req, res) => {
@@ -605,7 +590,7 @@ app.get('/api/community-posts', (req, res) => {
   }
 });
 
-// Create a new post - updated to return full post data
+// Create a new post
 app.post('/api/community-posts', (req, res) => {
   try {
     const { userid, caption } = req.body;
@@ -805,6 +790,7 @@ app.get('/api/community-posts/user/:userid', (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
