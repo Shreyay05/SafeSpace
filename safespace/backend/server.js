@@ -133,18 +133,21 @@ app.post('/api/register', async (req, res) => {
             // If therapist, insert additional information
             if (userRole === 'therapist' && specialization) {
               const therapistQuery = `
-                INSERT INTO therapist (
-                  userid, 
-                  specialization, 
-                  experience_years, 
-                  consultation_fee
+                INSERT INTO therapists (
+                  therapistid, 
+                  Specialization, 
+                  YearsOfExperience, 
+                  consultation_fee,
+                  userid
                 ) 
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
               `;
+              
+              const therapistId = uuidv4();
               
               db.query(
                 therapistQuery, 
-                [userid, specialization, experience, fee], 
+                [therapistId, specialization, experience, fee, userid], 
                 (therapistErr) => {
                   if (therapistErr) {
                     console.error('Error registering therapist info:', therapistErr);
@@ -361,9 +364,16 @@ app.put('/api/users/:userid', async (req, res) => {
   }
 });
 
-// Get all therapists
+// Get all therapists - FIXED ENDPOINT from first file
 app.get('/api/therapists', (req, res) => {
-  const query = 'SELECT * FROM therapists';
+  // Use a JOIN to get both therapist and user information
+  const query = `
+    SELECT t.therapistid, u.name as Username, t.Specialization, 
+           t.YearsOfExperience, t.consultation_fee, u.userid
+    FROM therapists t
+    JOIN user u ON t.userid = u.userid
+    WHERE u.role = 'therapist'
+  `;
   
   db.query(query, (err, results) => {
     if (err) {
@@ -371,13 +381,11 @@ app.get('/api/therapists', (req, res) => {
       return res.status(500).json({ error: 'Database error' });
     }
     
-    return res.json({
-      therapists: results
-    });
+    return res.json(results);
   });
 });
 
-// Get therapist by ID
+// Get therapist by ID from second file
 app.get('/api/therapist/:therapistid', (req, res) => {
   const { therapistid } = req.params;
   
@@ -411,109 +419,123 @@ app.get('/api/therapist/:therapistid', (req, res) => {
   });
 });
 
-// Get available time slots for a therapist
-app.get('/api/time-slots/:therapistId', (req, res) => {
-  const { therapistId } = req.params;
+// Get available time slots for a therapist from first file
+app.get('/api/availability/:therapistid/:date', (req, res) => {
+  const { therapistid, date } = req.params;
   
-  const query = 'SELECT * FROM time_slots WHERE therapistid = ? AND is_booked = 0';
+  // Convert the date parameter to start/end of day for querying
+  const startDate = new Date(date);
+  startDate.setHours(0, 0, 0, 0);
   
-  db.query(query, [therapistId], (err, results) => {
+  const endDate = new Date(date);
+  endDate.setHours(23, 59, 59, 999);
+  
+  const formattedStartDate = startDate.toISOString().slice(0, 19).replace('T', ' ');
+  const formattedEndDate = endDate.toISOString().slice(0, 19).replace('T', ' ');
+  
+  // Query to get all booked slots for the therapist on the specified date
+  const query = `
+    SELECT booking_time 
+    FROM Bookings 
+    WHERE therapistid = ? 
+    AND booking_time BETWEEN ? AND ?
+    AND status = 'booked'
+  `;
+  
+  db.query(query, [therapistid, formattedStartDate, formattedEndDate], (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
     
-    return res.json(results);
+    // Extract all booked hours into an array
+    const bookedHours = results.map(booking => {
+      const bookingTime = new Date(booking.booking_time);
+      return bookingTime.getHours();
+    });
+    
+    // Create an array of all possible slots (9 AM to 5 PM)
+    const allSlots = [];
+    for (let hour = 9; hour < 17; hour++) {
+      const ampm = hour < 12 ? 'AM' : 'PM';
+      const hour12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+      const timeString = `${hour12}:00 ${ampm}`;
+      
+      allSlots.push({
+        time: timeString,
+        slotId: `slot-${date}-${hour}`,
+        disabled: bookedHours.includes(hour)
+      });
+    }
+    
+    res.json(allSlots);
   });
 });
 
-// Book an appointment
+// Book an appointment from first file
 app.post('/api/appointments', (req, res) => {
-  const { userid, therapistid, slotid } = req.body;
+  const { userid, therapistid, appointment_time } = req.body;
+
+  // Convert ISO 8601 string to MySQL DATETIME format
+  const appointmentDate = new Date(appointment_time);
+  const formattedAppointmentTime = appointmentDate.toISOString().slice(0, 19).replace('T', ' ');
   
-  // Start a transaction
-  db.beginTransaction((err) => {
-    if (err) {
-      console.error('Transaction error:', err);
-      return res.status(500).json({ error: 'Transaction error' });
+  // First check if this slot is already booked
+  const checkQuery = `
+    SELECT COUNT(*) as count
+    FROM Bookings
+    WHERE therapistid = ?
+    AND booking_time = ?
+    AND status = 'booked'
+  `;
+  
+  db.query(checkQuery, [therapistid, formattedAppointmentTime], (checkErr, checkResult) => {
+    if (checkErr) {
+      console.error('Booking check error:', checkErr);
+      return res.status(500).json({ error: 'Error checking availability' });
     }
     
-    // 1. Update the time slot to mark it as booked
-    const updateSlotQuery = 'UPDATE time_slots SET is_booked = 1 WHERE slotid = ? AND is_booked = 0';
+    if (checkResult[0].count > 0) {
+      return res.status(409).json({ 
+        error: 'This time slot has just been booked by someone else. Please select another time.'
+      });
+    }
     
-    db.query(updateSlotQuery, [slotid], (updateErr, updateResult) => {
-      if (updateErr || updateResult.affectedRows === 0) {
-        db.rollback(() => {
-          console.error('Slot booking error:', updateErr || 'Slot already booked');
-          return res.status(400).json({ error: 'Slot is no longer available' });
-        });
-        return;
+    // Time slot is available, proceed with booking
+    const createBookingQuery = 'INSERT INTO Bookings (userid, therapistid, booking_time, status) VALUES (?, ?, ?, ?)';
+
+    db.query(createBookingQuery, [userid, therapistid, formattedAppointmentTime, 'booked'], (err, result) => {
+      if (err) {
+        console.error('Booking creation error:', err);
+        return res.status(500).json({ error: 'Error creating booking' });
       }
-      
-      // 2. Get the time slot details
-      const slotQuery = 'SELECT * FROM time_slots WHERE slotid = ?';
-      
-      db.query(slotQuery, [slotid], (slotErr, slotResults) => {
-        if (slotErr || slotResults.length === 0) {
-          db.rollback(() => {
-            console.error('Slot retrieval error:', slotErr || 'Slot not found');
-            return res.status(400).json({ error: 'Invalid slot' });
-          });
-          return;
+
+      return res.status(201).json({ 
+        message: 'Appointment booked successfully',
+        appointmentId: result.insertId,
+        appointment: {
+          userid: userid,
+          therapistid: therapistid,
+          booking_time: formattedAppointmentTime,
+          status: 'booked'
         }
-        
-        const slotInfo = slotResults[0];
-        
-        // 3. Create an appointment record
-        const createAppointmentQuery = 'INSERT INTO Appointments (userid, therapistid, slotid, booking_time, status) VALUES (?, ?, ?, NOW(), ?)';
-        
-        db.query(createAppointmentQuery, [userid, therapistid, slotid, 'booked'], (appointmentErr) => {
-          if (appointmentErr) {
-            db.rollback(() => {
-              console.error('Appointment creation error:', appointmentErr);
-              return res.status(500).json({ error: 'Error creating appointment' });
-            });
-            return;
-          }
-          
-          // Commit the transaction
-          db.commit((commitErr) => {
-            if (commitErr) {
-              db.rollback(() => {
-                console.error('Commit error:', commitErr);
-                return res.status(500).json({ error: 'Error finalizing booking' });
-              });
-              return;
-            }
-            
-            return res.status(201).json({ 
-              message: 'Appointment booked successfully',
-              appointment: {
-                therapistid: therapistid,
-                start_time: slotInfo.start_time,
-                end_time: slotInfo.end_time
-              }
-            });
-          });
-        });
       });
     });
   });
 });
 
-// Get user's appointments
+// Get user's appointments from Bookings table from first file
 app.get('/api/appointments/:userid', (req, res) => {
   const { userid } = req.params;
   
   const query = `
-    SELECT a.appointmentid, a.booking_time, a.status, 
-           t.Username as therapist_name, t.Specialization,
-           ts.start_time, ts.end_time
-    FROM Appointments a
-    JOIN therapists t ON a.therapistid = t.therapistid
-    JOIN time_slots ts ON a.slotid = ts.slotid
-    WHERE a.userid = ?
-    ORDER BY ts.start_time DESC
+    SELECT b.appointmentid, b.booking_time, b.status, 
+           u.name as therapist_name, t.Specialization
+    FROM Bookings b
+    JOIN therapists t ON b.therapistid = t.therapistid
+    JOIN user u ON t.userid = u.userid
+    WHERE b.userid = ?
+    ORDER BY b.booking_time DESC
   `;
   
   db.query(query, [userid], (err, results) => {
@@ -526,7 +548,7 @@ app.get('/api/appointments/:userid', (req, res) => {
   });
 });
 
-// Get user's prescriptions
+// Get user's prescriptions from second file
 app.get('/api/prescriptions/:userid', (req, res) => {
   const { userid } = req.params;
   
@@ -559,7 +581,7 @@ app.get('/api/prescriptions/:userid', (req, res) => {
   });
 });
 
-// Get all community posts
+// Get all community posts from second file
 app.get('/api/community-posts', (req, res) => {
   try {
     // Query to get all posts with user information
@@ -590,7 +612,7 @@ app.get('/api/community-posts', (req, res) => {
   }
 });
 
-// Create a new post
+// Create a new post from second file
 app.post('/api/community-posts', (req, res) => {
   try {
     const { userid, caption } = req.body;
@@ -648,7 +670,7 @@ app.post('/api/community-posts', (req, res) => {
   }
 });
 
-// Like/unlike a post
+// Like/unlike a post from second file
 app.put('/api/community-posts/:postId/like', (req, res) => {
   try {
     const { postId } = req.params;
@@ -683,7 +705,7 @@ app.put('/api/community-posts/:postId/like', (req, res) => {
   }
 });
 
-// Add a comment to a post
+// Add a comment to a post from second file
 app.post('/api/community-posts/:postId/comment', (req, res) => {
   try {
     const { postId } = req.params;
@@ -758,7 +780,7 @@ app.post('/api/community-posts/:postId/comment', (req, res) => {
   }
 });
 
-// Get a specific user's posts
+// Get a specific user's posts from second file
 app.get('/api/community-posts/user/:userid', (req, res) => {
   try {
     const { userid } = req.params;
