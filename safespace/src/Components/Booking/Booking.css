@@ -1,0 +1,389 @@
+/* Booking page styles */
+.booking-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(170, 148, 172, 0.3);
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+}
+
+.booking-sidebar {
+  width: 250px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+}
+
+.booking-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.booking-sidebar-logo-img {
+  width: 40px;
+  height: 40px;
+}
+
+.booking-sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-sidebar-links li {
+  padding: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.booking-sidebar-links li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.booking-nav-arrow {
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.booking-sidebar-links li:hover .booking-nav-arrow {
+  transform: translateX(3px);
+  opacity: 1;
+}
+
+.booking-content {
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.booking-header {
+  margin-bottom: 30px;
+}
+
+.booking-title {
+  font-size: 32px;
+  color: #2d2d2d;
+  margin-bottom: 10px;
+}
+
+.booking-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.therapists-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.therapist-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.therapist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.therapist-card.selected {
+  border: 2px solid #aa94ac;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.therapist-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.therapist-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #aa94ac;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.therapist-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #2d2d2d;
+}
+
+.therapist-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.therapist-details {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.calendar-container {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-title {
+  font-size: 20px;
+  color: #2d2d2d;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.day-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.day-header {
+  text-align: center;
+  padding: 10px;
+  background: #aa94ac;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.time-slot {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.time-slot:hover:not(.disabled) {
+  background: #f0e6f0;
+  border-color: #aa94ac;
+}
+
+.time-slot.selected {
+  background: #aa94ac;
+  color: white;
+  border-color: #8f6b8f;
+}
+
+.time-slot.disabled {
+  background: #f0f0f0;
+  color: #aaa;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.booking-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.confirm-btn {
+  background-color: #aa94ac;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-btn:hover:not(:disabled) {
+  background-color: #8f6b8f;
+  transform: translateY(-2px);
+}
+
+.confirm-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  background-color: transparent;
+  color: #555;
+  border: 1px solid #aaa;
+  padding: 14px 30px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  margin-right: 15px;
+}
+
+.back-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.confirmation-message {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  max-width: 500px;
+}
+
+.confirmation-message h2 {
+  color: #2d2d2d;
+  margin-bottom: 15px;
+}
+
+.confirmation-message p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.confirmation-details {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.confirmation-details p {
+  margin: 5px 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .booking-container {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .booking-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+  
+  .booking-content {
+    padding: 20px;
+  }
+  
+  .therapists-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .calendar-week {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .day-column {
+    margin-bottom: 10px;
+  }
+  
+  .booking-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .back-btn, .confirm-btn {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+/* Add these styles to your existing Booking.css file */
+
+.login-reminder {
+background-color: #f8f9fa;
+border: 1px solid #e9ecef;
+border-radius: 8px;
+padding: 20px;
+margin-bottom: 20px;
+text-align: center;
+}
+
+.login-btn {
+background-color: #4CAF50;
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+margin-top: 10px;
+transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+background-color: #45a049;
+}
+
+.user-info {
+background-color: #e7f3ff;
+border: 1px solid #cce5ff;
+border-radius: 8px;
+padding: 10px 20px;
+margin-bottom: 20px;
+}
+
+.error-message {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+border-radius: 5px;
+padding: 10px 15px;
+margin-bottom: 20px;
+}

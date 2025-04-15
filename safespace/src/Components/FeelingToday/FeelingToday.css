@@ -1,0 +1,345 @@
+.feeling-container {
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 4rem;
+}
+
+/* Title */
+.feeling-title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: #000;
+}
+
+/* Mood grid layout */
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+/* Mood card */
+.mood-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 1rem;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mood-card:hover {
+  transform: scale(1.05);
+}
+
+/* Mood image */
+.mood-image {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+/* Mood name */
+.mood-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Selected mood section */
+.selected-section {
+  max-width: 800px;
+  width: 100%;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  margin-top: 2rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selected-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #000;
+}
+
+.selected-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Activity box styling */
+.activity-list li {
+  background-color: #e6d6f4; /* lilac */
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.activity-list li:hover {
+  background-color: #ddc6f4;
+}
+
+/* Checkbox styling */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Thank-you message */
+.thank-you {
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* Back button */
+.back-button {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  background-color: transparent;
+  color: #555;
+  font-weight: bold;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  color: #333;
+  border-color: #999;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.main-back {
+  margin-top: 3rem;
+}
+
+/* Intensity Scale Styling */
+.intensity-scale {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.intensity-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: linear-gradient(to right, #e6f7ff, #ccf2ff);
+}
+
+.intensity-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* Scale colors - from blue (mild) to red (severe) */
+.intensity-button:nth-child(1),
+.intensity-button:nth-child(2) {
+  background: linear-gradient(to right, #e6f7ff, #ccf2ff);
+  color: #0066cc;
+}
+
+.intensity-button:nth-child(3),
+.intensity-button:nth-child(4) {
+  background: linear-gradient(to right, #e6ffe6, #ccffcc);
+  color: #009933;
+}
+
+.intensity-button:nth-child(5),
+.intensity-button:nth-child(6) {
+  background: linear-gradient(to right, #fff2e6, #ffebcc);
+  color: #ff8000;
+}
+
+.intensity-button:nth-child(7),
+.intensity-button:nth-child(8) {
+  background: linear-gradient(to right, #ffe6e6, #ffcccc);
+  color: #cc0000;
+}
+
+.intensity-button:nth-child(9),
+.intensity-button:nth-child(10) {
+  background: linear-gradient(to right, #ffe6e6, #ff9999);
+  color: #990000;
+}
+
+/* Feeling better question styling */
+.feeling-better-question {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f0f8ff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.feeling-better-question h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.feeling-better-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.yes-button, .no-button {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.yes-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.no-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.yes-button:hover, .no-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.positive-feedback {
+  margin-top: 1rem;
+  color: #4CAF50;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Reasons grid styling */
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.reason-card {
+  background-color: #f0f8ff;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reason-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  background-color: #e1f5fe;
+}
+
+.reason-card p {
+  margin: 0;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Specialist recommendation styling */
+.specialist-recommendation {
+  background-color: #e8f5e9;
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 2rem 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.specialist-recommendation h3 {
+  color: #388e3c;
+  margin-bottom: 1rem;
+}
+
+.specialist-action {
+  margin: 2rem 0;
+}
+
+.book-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.book-button:hover {
+  background-color: #388e3c;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.other-specialists {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #ddd;
+}
+
+.other-specialists h4 {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.specialist-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.specialist-tag {
+  background-color: #e0e0e0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #333;
+}

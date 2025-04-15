@@ -1,0 +1,279 @@
+/* General styles */
+body, html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px; /* Base font size increased */
+}
+
+.dashboard-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  background: rgba(170, 148, 172, 0.8);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 14px; /* Slightly larger padding */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px; /* Increased from 14px */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-toggle:hover {
+  background: rgba(143, 107, 143, 0.9);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px; /* Slightly wider to accommodate larger text */
+  height: 100vh;
+  background: rgba(62, 62, 82, 0.85); /* Darker, more opaque background for better contrast */
+  backdrop-filter: blur(12px); /* Blur effect */
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  margin-left: 60px; /* Space for the toggle button */
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.sidebar-logo-img {
+  width: 45px; /* Slightly larger */
+  height: 45px;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-links li {
+  padding: 14px; /* Increased padding */
+  cursor: pointer;
+  font-size: 18px; /* Increased from 16px */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-links li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-arrow {
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sidebar-links li:hover .nav-arrow {
+  transform: translateX(3px);
+  opacity: 1;
+}
+
+/* Chatbot Icon */
+.chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 12px; /* Slightly larger padding */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease;
+}
+
+.chatbot-icon img {
+  width: 45px; /* Slightly larger */
+  height: 45px;
+}
+
+.chatbot-icon:hover {
+  transform: scale(1.05);
+}
+
+/* Community Icon */
+.community-icon {
+  position: fixed;
+  bottom: 100px; /* move up so it doesn't collide with chatbot */
+  right: 20px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 12px; /* Slightly larger padding */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.community-icon img {
+  width: 45px; /* Slightly larger */
+  height: 45px;
+}
+
+/* Main content */
+.main-content {
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.main-content.full-width {
+  margin-left: 0;
+  padding-left: 80px; /* Extra padding when sidebar is hidden */
+}
+
+/* Logo */
+.dashboard-logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.9); /* More opaque for better visibility */
+  padding: 10px 14px; /* Slightly larger padding */
+  border-radius: 8px;
+}
+
+.logo-img {
+  width: 55px; /* Slightly larger */
+  height: 55px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px; /* Increased from 14px */
+  color: #2d2d2d; /* Darker text color for better visibility */
+}
+
+.logo-text p {
+  font-weight: bold;
+  margin: 0;
+  color: #1a1a1a; /* Darker color for better contrast */
+}
+
+.logo-text span {
+  font-size: 14px; /* Increased from 12px */
+  color: #444; /* Darker color for better visibility */
+}
+
+/* Quote styling */
+.quote-container {
+  text-align: center;
+  max-width: 800px; /* Slightly wider for larger text */
+  position: relative;
+  top: -50px;
+}
+
+.quote {
+  font-size: 42px; /* Increased from 36px */
+  font-weight: 500;
+  color: #1a1a1a; /* Darker text color for better visibility */
+  margin-bottom: 45px;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* Text shadow for better readability on any background */
+}
+
+/* Button styling */
+.action-buttons {
+  display: flex;
+  gap: 24px; /* Slightly larger gap */
+}
+
+.feeling-btn, .session-btn {
+  background-color: #8a5e8c; /* Slightly darker for better contrast */
+  color: white;
+  border: none;
+  padding: 16px 32px; /* Larger padding */
+  font-size: 16px; /* Increased from 14px */
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  width: 260px; /* Slightly wider */
+}
+
+.feeling-btn:hover, .session-btn:hover {
+  background-color: #6e476e;
+  transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px; /* Consistent with the desktop version */
+    height: 100%;
+    margin-left: 0;
+    z-index: 1000;
+  }
+  
+  .sidebar-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+  }
+  
+  .main-content {
+    width: 100%;
+    padding: 60px 20px 20px;
+  }
+  
+  .main-content.full-width {
+    padding-left: 20px;
+  }
+  
+  .quote {
+    font-size: 28px; /* Increased from 24px but not too large for mobile */
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7); /* Consistent text shadow */
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 16px; /* Slightly larger gap */
+  }
+  
+  .feeling-btn, .session-btn {
+    width: 100%;
+    max-width: 300px; /* Slightly wider */
+    padding: 14px 28px; /* Adjusted for mobile */
+  }
+}

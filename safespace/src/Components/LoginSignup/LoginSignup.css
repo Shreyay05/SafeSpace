@@ -1,0 +1,227 @@
+/* Reset and basic styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url('../Assets/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container Styling */
+  .container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  
+  /* Title Section */
+  .title-section {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 42px;
+    font-weight: bold;
+    color: rgb(36, 1, 62);
+  }
+  
+  .tagline {
+    font-size: 16px;
+    color: #676767;
+    margin-top: 5px;
+  }
+  
+  /* Header Section */
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .text {
+    color: rgb(28, 1, 28);
+    font-size: 28px;
+    font-weight: 700;
+  }
+  
+  .underline {
+    width: 61px;
+    height: 4px;
+    background: rgb(36, 1, 62);
+    border-radius: 9px;
+  }
+  
+  /* Input Fields */
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 45px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 5px;
+  }
+  
+  .input img {
+    margin: 0 10px;
+    height: 18px;
+    width: 18px;
+  }
+  
+  .input input, .input select {
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #333;
+    font-size: 15px;
+    padding: 0 5px;
+  }
+  
+  .select-field {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #333;
+    font-size: 15px;
+    padding: 0 10px;
+    -webkit-appearance: menulist;
+    appearance: menulist;
+  }
+  
+  .select-input {
+    padding: 0;
+  }
+  
+  /* Therapist Fields */
+  .therapist-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 5px;
+    padding: 10px;
+    background-color: rgba(36, 1, 62, 0.05);
+    border-radius: 8px;
+  }
+  
+  /* Forgot Password */
+  .forgot-password {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #797979;
+    text-align: center;
+  }
+  
+  .forgot-password span {
+    color: rgb(36, 1, 62);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  /* Submit Buttons */
+  .submit-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 15px;
+  }
+  
+  .submit {
+    flex: 1;
+    height: 45px;
+    background-color: rgb(36, 1, 62);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .submit:hover {
+    background-color: rgb(28, 1, 28);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .gray {
+    background: #EAEAEA;
+    color: #676767;
+  }
+  
+  .gray:hover {
+    background: #d4d4d4;
+  }
+  
+  /* Messages */
+  .error-message {
+    color: #e74c3c;
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+    background-color: rgba(231, 76, 60, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+  }
+  
+  .loading-message {
+    color: rgb(36, 1, 62);
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 500px) {
+    .container {
+      width: 95%;
+      padding: 20px;
+    }
+    
+    .title {
+      font-size: 36px;
+    }
+    
+    .text {
+      font-size: 24px;
+    }
+  }
