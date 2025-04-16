@@ -924,7 +924,29 @@ app.get('/api/community-posts/user/:userid', (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-
+// Get therapist's appointments
+app.get('/api/therapist-appointments/:therapistid', (req, res) => {
+  const { therapistid } = req.params;
+  
+  const query = `
+    SELECT b.appointmentid, b.booking_time, b.status, 
+           u.name as patient_name, u.email as patient_email,
+           u.userid as patient_id
+    FROM Bookings b
+    JOIN user u ON b.userid = u.userid
+    WHERE b.therapistid = ?
+    ORDER BY b.booking_time DESC
+  `;
+  
+  db.query(query, [therapistid], (err, results) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    return res.json(results);
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
