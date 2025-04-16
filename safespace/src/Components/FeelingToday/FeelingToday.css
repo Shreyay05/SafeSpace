@@ -51,6 +51,33 @@
   font-weight: 600;
   color: #000;
 }
+/* Dashboard button styling - persistent and with better styling */
+.dashboard-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 1000; /* Ensures it's above other elements */
+}
+
+.dashboard-button:hover {
+  background-color: #5649c0;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-button:active {
+  transform: translateY(-1px);
+}
 
 /* Selected mood section */
 .selected-section {

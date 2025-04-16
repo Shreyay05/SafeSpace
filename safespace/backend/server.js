@@ -696,15 +696,47 @@ app.get('/api/prescriptions/:userid', (req, res) => {
 // Get all community posts
 app.get('/api/community-posts', (req, res) => {
   try {
-    // Query to get all posts with user information
-    const query = `
-      SELECT cp.*, u.name as username
-      FROM community_posts cp
-      LEFT JOIN user u ON cp.userid = u.userid
-      ORDER BY cp.created_at DESC
-    `;
+    const userId = req.query.userid; // Get optional user ID to check liked status
     
-    db.query(query, (err, results) => {
+    let query;
+    let queryParams = [];
+    
+    if (userId) {
+      // If user ID is provided, include whether the user liked each post
+      query = `
+        SELECT 
+          cp.*,
+          u.name as username,
+          IF(pl.id IS NULL, 0, 1) as liked,
+          (SELECT COUNT(*) FROM post_likes WHERE postid = cp.id) as reactions
+        FROM 
+          community_posts cp
+        LEFT JOIN 
+          user u ON cp.userid = u.userid
+        LEFT JOIN 
+          post_likes pl ON cp.id = pl.postid AND pl.userid = ?
+        ORDER BY 
+          cp.created_at DESC
+      `;
+      queryParams.push(userId);
+    } else {
+      // If no user ID, just get posts without liked status
+      query = `
+        SELECT 
+          cp.*,
+          u.name as username,
+          0 as liked,
+          (SELECT COUNT(*) FROM post_likes WHERE postid = cp.id) as reactions
+        FROM 
+          community_posts cp
+        LEFT JOIN 
+          user u ON cp.userid = u.userid
+        ORDER BY 
+          cp.created_at DESC
+      `;
+    }
+    
+    db.query(query, queryParams, (err, results) => {
       if (err) {
         console.error('Database error:', err);
         return res.status(500).json({ error: 'Database error' });
@@ -724,6 +756,80 @@ app.get('/api/community-posts', (req, res) => {
   }
 });
 
+// Like/unlike a post
+app.put('/api/community-posts/:postId/like', (req, res) => {
+  try {
+    const { postId } = req.params;
+    const { userid, liked } = req.body;
+    
+    if (!userid) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+    
+    if (liked) {
+      // Add a new like
+      const addLikeQuery = `
+        INSERT INTO post_likes (postid, userid)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE created_at = CURRENT_TIMESTAMP
+      `;
+      
+      db.query(addLikeQuery, [postId, userid], (err, result) => {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        // Get updated like count
+        db.query('SELECT COUNT(*) as count FROM post_likes WHERE postid = ?', [postId], (countErr, countResults) => {
+          if (countErr) {
+            console.error('Database error:', countErr);
+            return res.status(500).json({ error: 'Database error' });
+          }
+          
+          const likeCount = countResults[0].count;
+          
+          return res.json({ 
+            message: 'Post liked successfully',
+            reactions: likeCount
+          });
+        });
+      });
+    } else {
+      // Remove a like
+      const removeLikeQuery = `
+        DELETE FROM post_likes
+        WHERE postid = ? AND userid = ?
+      `;
+      
+      db.query(removeLikeQuery, [postId, userid], (err, result) => {
+        if (err) {
+          console.error('Database error:', err);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        // Get updated like count
+        db.query('SELECT COUNT(*) as count FROM post_likes WHERE postid = ?', [postId], (countErr, countResults) => {
+          if (countErr) {
+            console.error('Database error:', countErr);
+            return res.status(500).json({ error: 'Database error' });
+          }
+          
+          const likeCount = countResults[0].count;
+          
+          return res.json({ 
+            message: 'Post unliked successfully',
+            reactions: likeCount
+          });
+        });
+      });
+    }
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Create a new post
 app.post('/api/community-posts', (req, res) => {
   try {
@@ -737,12 +843,10 @@ app.post('/api/community-posts', (req, res) => {
       INSERT INTO community_posts (
         userid,
         caption,
-        reactions,
-        liked,
         comments,
         created_at
       )
-      VALUES (?, ?, 0, 0, '[]', CURRENT_TIMESTAMP)
+      VALUES (?, ?, '[]', CURRENT_TIMESTAMP)
     `;
     
     db.query(query, [userid, caption], (err, result) => {
@@ -774,41 +878,6 @@ app.post('/api/community-posts', (req, res) => {
             username: username
           }
         });
-      });
-    });
-  } catch (error) {
-    console.error('Server error:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Like/unlike a post
-app.put('/api/community-posts/:postId/like', (req, res) => {
-  try {
-    const { postId } = req.params;
-    const { liked } = req.body;
-    
-    // Update the post's liked status and reactions count
-    const query = `
-      UPDATE community_posts
-      SET 
-        liked = ?,
-        reactions = reactions ${liked ? '+1' : '-1'}
-      WHERE id = ?
-    `;
-    
-    db.query(query, [liked ? 1 : 0, postId], (err, result) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-      
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-      
-      return res.json({ 
-        message: liked ? 'Post liked successfully' : 'Post unliked successfully'
       });
     });
   } catch (error) {
@@ -1000,6 +1069,7 @@ app.get('/api/appointments/:userid', (req, res) => {
     });
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

@@ -19,7 +19,13 @@ const CommunityPosts = ({ onNavigate, userData }) => {
     try {
       setIsLoading(true);
       setError('');
-      const response = await fetch('http://localhost:3001/api/community-posts');
+      
+      // Include the user ID in the request to get personalized like status
+      const url = userData?.userid 
+        ? `http://localhost:3001/api/community-posts?userid=${userData.userid}`
+        : 'http://localhost:3001/api/community-posts';
+      
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error('Failed to fetch posts');
@@ -120,13 +126,26 @@ const CommunityPosts = ({ onNavigate, userData }) => {
               ? {
                   ...post,
                   liked: currentLiked,
-                  reactions: currentLiked ? post.reactions : post.reactions - 1
+                  reactions: currentLiked ? post.reactions + 1 : post.reactions - 1
                 }
               : post
           )
         );
         throw new Error('Failed to update like status');
       }
+      
+      // Update with actual count from server
+      const data = await response.json();
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                reactions: data.reactions
+              }
+            : post
+        )
+      );
     } catch (error) {
       console.error('Error toggling like:', error);
       setError('Failed to update like status. Please try again.');

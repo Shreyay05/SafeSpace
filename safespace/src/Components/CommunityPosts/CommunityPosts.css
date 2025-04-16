@@ -132,10 +132,26 @@ h2 {
   cursor: pointer;
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.like-btn:hover {
+  transform: scale(1.05);
+}
+
+.like-btn.liked .heart {
+  animation: pulse 0.4s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .heart {
   font-size: 1.5rem;
+  transition: transform 0.2s ease;
 }
 
 .like-count {

@@ -421,11 +421,9 @@ const FeelingToday = ({ onNavigate }) => {
         </div>
       )}
 
-      {!showIntensityScale && !showReasons && !showSpecialists && (
-        <button className="back-button main-back" onClick={() => onNavigate('dashboard')}>
-          Back to Dashboard
-        </button>
-      )}
+   <button className="dashboard-button" onClick={() => onNavigate('dashboard')}>
+      Back to Dashboard
+    </button>
     </div>
   );
 };

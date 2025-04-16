@@ -167,7 +167,7 @@ const LoginSignup = ({ onNavigate }) => {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className="container">
       <div className="title-section">
