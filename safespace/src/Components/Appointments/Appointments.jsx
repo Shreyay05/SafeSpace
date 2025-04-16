@@ -181,9 +181,9 @@ const Appointments = () => {
               <div className="flex flex-col md:flex-row justify-between">
                 <div>
                   <h3 className="font-bold text-lg">
-                    Patient: {appointment.patient_name}
+                  
                   </h3>
-                  <p className="text-gray-600">Email: {appointment.patient_email}</p>
+                  
                   <p className="text-gray-600">
                     <span className="font-medium">Date & Time:</span> {formatAppointmentDate(appointment.booking_time)}
                   </p>
@@ -216,15 +216,6 @@ const Appointments = () => {
                         Cancel Appointment
                       </button>
                     </>
-                  )}
-                  
-                  {appointment.status === 'completed' && (
-                    <a 
-                      href={`/add-diagnosis/${appointment.patient_id}`}
-                      className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 text-center"
-                    >
-                      Add Diagnosis
-                    </a>
                   )}
                 </div>
               </div>

@@ -947,6 +947,59 @@ app.get('/api/therapist-appointments/:therapistid', (req, res) => {
     return res.json(results);
   });
 });
+// Get user's appointments
+app.get('/api/appointments/:userid', (req, res) => {
+  const { userid } = req.params;
+  
+  // First check the role of the user
+  db.query('SELECT role FROM user WHERE userid = ?', [userid], (roleErr, roleResult) => {
+    if (roleErr) {
+      console.error('Database error:', roleErr);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (roleResult.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userRole = roleResult[0].role;
+    let query;
+    
+    if (userRole === 'therapist') {
+      // If user is a therapist, get their appointments with patients
+      query = `
+        SELECT b.appointmentid, b.booking_time, b.status, 
+               u.name as patient_name, u.email as patient_email, u.userid as patient_id
+        FROM Bookings b
+        JOIN user u ON b.userid = u.userid
+        WHERE b.therapistid IN (
+          SELECT therapistid FROM therapists WHERE userid = ?
+        )
+        ORDER BY b.booking_time DESC
+      `;
+    } else {
+      // If user is a patient, get their appointments with therapists
+      query = `
+        SELECT b.appointmentid, b.booking_time, b.status, 
+               u.name as therapist_name, t.Specialization
+        FROM Bookings b
+        JOIN therapists t ON b.therapistid = t.therapistid
+        JOIN user u ON t.userid = u.userid
+        WHERE b.userid = ?
+        ORDER BY b.booking_time DESC
+      `;
+    }
+    
+    db.query(query, [userid], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      return res.json(results);
+    });
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
