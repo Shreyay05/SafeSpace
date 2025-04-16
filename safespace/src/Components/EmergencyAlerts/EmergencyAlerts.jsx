@@ -47,11 +47,7 @@ const EmergencyAlert = ({ onNavigate }) => {
             <button onClick={() => handleContact(userEmergencyContact.name, userEmergencyContact.contact)}>Contact</button>
           </div>
 
-          <h3>Your State Mental Hospital</h3>
-          <div className="contact-card">
-            <span>{mentalHospitalContact.hospital} ({mentalHospitalContact.state}): {mentalHospitalContact.contact}</span>
-            <button onClick={() => handleContact(mentalHospitalContact.hospital, mentalHospitalContact.contact)}>Contact</button>
-          </div>
+         
         </div>
 
         <button className="back-button" onClick={() => onNavigate('dashboard')}>
