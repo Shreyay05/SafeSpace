@@ -9,7 +9,8 @@ import Chatbot from './Components/Chatbot/Chatbot';
 import CommunityPosts from './Components/CommunityPosts/CommunityPosts';
 import ProfilePage from './Components/ProfilePage/ProfilePage';
 import EmergencyAlert from './Components/EmergencyAlerts/EmergencyAlerts';
-import PrescriptionPage from './Components/PrescriptionPage/PrescriptionPage'; // Import PrescriptionPage
+import Appointments from './Components/Appointments/Appointments';
+import PrescriptionPage from './Components/PrescriptionPage/PrescriptionPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('login');
@@ -47,17 +48,42 @@ function App() {
     localStorage.setItem('userData', JSON.stringify(newUserData));
   };
 
+  // Check if the current user is a therapist
+  const isTherapist = userData?.role === 'therapist';
+
+  // Redirect to dashboard if user tries to access patient-only pages as a therapist
+  useEffect(() => {
+    if (isTherapist && ['feeling', 'booking', 'emergency'].includes(currentPage)) {
+      setCurrentPage('dashboard');
+    }
+  }, [currentPage, isTherapist]);
+
   return (
     <>
-      {currentPage === 'login' && <LoginSignup onNavigate={handleNavigation} />}
-      {currentPage === 'dashboard' && <Dashboard userData={userData} onNavigate={handleNavigation} onLogout={handleLogout} />}
-      {currentPage === 'feeling' && <FeelingToday userData={userData} onNavigate={handleNavigation} />}
-      {currentPage === 'booking' && <Booking userData={userData} onNavigate={handleNavigation} />}
+      {currentPage === 'login' && <LoginSignup onNavigate={handleNavigation} updateUserData={updateUserData} />}
+      
+      {currentPage === 'dashboard' && 
+        <Dashboard 
+          userData={userData} 
+          userRole={userData?.role || 'user'} 
+          onNavigate={handleNavigation} 
+          onLogout={handleLogout} 
+        />
+      }
+      
+      {/* Only render these components if user is not a therapist */}
+      {!isTherapist && currentPage === 'feeling' && <FeelingToday userData={userData} onNavigate={handleNavigation} />}
+      {!isTherapist && currentPage === 'booking' && <Booking userData={userData} onNavigate={handleNavigation} />}
+      {!isTherapist && currentPage === 'emergency' && <EmergencyAlert userData={userData} onNavigate={handleNavigation} />}
+      
+      {/* These components are available to all users */}
       {currentPage === 'chatbot' && <Chatbot userData={userData} onNavigate={handleNavigation} />}
       {currentPage === 'community' && <CommunityPosts userData={userData} onNavigate={handleNavigation} />}
       {currentPage === 'profile' && <ProfilePage userData={userData} onNavigate={handleNavigation} updateUserData={updateUserData} onLogout={handleLogout} />}
-      {currentPage === 'emergency' && <EmergencyAlert userData={userData} onNavigate={handleNavigation} />}
       {currentPage === 'prescriptions' && <PrescriptionPage userData={userData} onNavigate={handleNavigation} />}
+      
+      {/* Appointments component - available to all but primarily for therapists */}
+      {currentPage === 'appointments' && <Appointments userData={userData} onNavigate={handleNavigation} />}
     </>
   );
 }

@@ -132,9 +132,10 @@ app.post('/api/register', async (req, res) => {
             
             // If therapist, insert additional information
             if (userRole === 'therapist' && specialization) {
+              const therapistId = uuidv4();
               const therapistQuery = `
                 INSERT INTO therapists (
-                  therapistid, 
+                  therapistid,
                   Specialization, 
                   YearsOfExperience, 
                   consultation_fee,
@@ -142,8 +143,6 @@ app.post('/api/register', async (req, res) => {
                 ) 
                 VALUES (?, ?, ?, ?, ?)
               `;
-              
-              const therapistId = uuidv4();
               
               db.query(
                 therapistQuery, 
@@ -364,7 +363,7 @@ app.put('/api/users/:userid', async (req, res) => {
   }
 });
 
-// Get all therapists - FIXED ENDPOINT from first file
+// Get all therapists
 app.get('/api/therapists', (req, res) => {
   // Use a JOIN to get both therapist and user information
   const query = `
@@ -385,22 +384,15 @@ app.get('/api/therapists', (req, res) => {
   });
 });
 
-// Get therapist by ID from second file
+// Get therapist by ID
 app.get('/api/therapist/:therapistid', (req, res) => {
   const { therapistid } = req.params;
   
   const query = `
-    SELECT 
-      therapistid,
-      userid,
-      Username,
-      Specialization,
-      YearsOfExperience,
-      consultation_fee
-    FROM 
-      therapists
-    WHERE 
-      therapistid = ?
+    SELECT t.*, u.name, u.email, u.contact_number, u.location_state 
+    FROM therapists t
+    JOIN user u ON t.userid = u.userid
+    WHERE t.therapistid = ?
   `;
   
   db.query(query, [therapistid], (err, results) => {
@@ -419,7 +411,7 @@ app.get('/api/therapist/:therapistid', (req, res) => {
   });
 });
 
-// Get available time slots for a therapist from first file
+// Get available time slots for a therapist
 app.get('/api/availability/:therapistid/:date', (req, res) => {
   const { therapistid, date } = req.params;
   
@@ -472,7 +464,49 @@ app.get('/api/availability/:therapistid/:date', (req, res) => {
   });
 });
 
-// Book an appointment from first file
+// Add new time slot (for therapists to set their availability)
+app.post('/api/time-slots', (req, res) => {
+  const { therapistid, specialization, start_time, end_time } = req.body;
+  
+  const query = `
+    INSERT INTO time_slots (therapistid, specialization, start_time, end_time, is_booked)
+    VALUES (?, ?, ?, ?, 0)
+  `;
+  
+  db.query(query, [therapistid, specialization, start_time, end_time], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    return res.status(201).json({
+      message: 'Time slot added successfully',
+      slotid: result.insertId
+    });
+  });
+});
+
+// Delete time slot
+app.delete('/api/time-slots/:slotId', (req, res) => {
+  const { slotId } = req.params;
+  
+  const query = 'DELETE FROM time_slots WHERE slotid = ? AND is_booked = 0';
+  
+  db.query(query, [slotId], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (result.affectedRows === 0) {
+      return res.status(400).json({ error: 'Cannot delete booked time slot or slot not found' });
+    }
+    
+    return res.json({ message: 'Time slot deleted successfully' });
+  });
+});
+
+// Book an appointment
 app.post('/api/appointments', (req, res) => {
   const { userid, therapistid, appointment_time } = req.body;
 
@@ -524,31 +558,109 @@ app.post('/api/appointments', (req, res) => {
   });
 });
 
-// Get user's appointments from Bookings table from first file
-app.get('/api/appointments/:userid', (req, res) => {
-  const { userid } = req.params;
+// Update appointment status
+app.put('/api/appointments/status/:appointmentId', (req, res) => {
+  const { appointmentId } = req.params;
+  const { status } = req.body;
   
-  const query = `
-    SELECT b.appointmentid, b.booking_time, b.status, 
-           u.name as therapist_name, t.Specialization
-    FROM Bookings b
-    JOIN therapists t ON b.therapistid = t.therapistid
-    JOIN user u ON t.userid = u.userid
-    WHERE b.userid = ?
-    ORDER BY b.booking_time DESC
-  `;
+  const query = 'UPDATE Bookings SET status = ? WHERE appointmentid = ?';
   
-  db.query(query, [userid], (err, results) => {
+  db.query(query, [status, appointmentId], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database error' });
     }
     
-    return res.json(results);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Appointment not found' });
+    }
+    
+    return res.json({ message: 'Appointment status updated successfully' });
   });
 });
 
-// Get user's prescriptions from second file
+// Get user's appointments
+app.get('/api/appointments/:userid', (req, res) => {
+  const { userid } = req.params;
+  
+  // First check the role of the user
+  db.query('SELECT role FROM user WHERE userid = ?', [userid], (roleErr, roleResult) => {
+    if (roleErr) {
+      console.error('Database error:', roleErr);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    
+    if (roleResult.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    const userRole = roleResult[0].role;
+    let query;
+    
+    if (userRole === 'therapist') {
+      // If user is a therapist, get their appointments with patients
+      query = `
+        SELECT b.appointmentid, b.booking_time, b.status, 
+               u.name as patient_name, u.email as patient_email
+        FROM Bookings b
+        JOIN user u ON b.userid = u.userid
+        WHERE b.therapistid = (
+          SELECT therapistid FROM therapists WHERE userid = ?
+        )
+        ORDER BY b.booking_time DESC
+      `;
+    } else {
+      // If user is a patient, get their appointments with therapists
+      query = `
+        SELECT b.appointmentid, b.booking_time, b.status, 
+               u.name as therapist_name, t.Specialization
+        FROM Bookings b
+        JOIN therapists t ON b.therapistid = t.therapistid
+        JOIN user u ON t.userid = u.userid
+        WHERE b.userid = ?
+        ORDER BY b.booking_time DESC
+      `;
+    }
+    
+    db.query(query, [userid], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      return res.json(results);
+    });
+  });
+});
+
+// Add diagnosis record
+app.post('/api/diagnosis', (req, res) => {
+  const { therapistid, userid, userhealthrecord, mental_analysis, medication, Prescription } = req.body;
+  
+  const query = `
+    INSERT INTO diagnosis 
+    (therapistid, userid, userhealthrecord, mental_analysis, medication, Prescription)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.query(
+    query, 
+    [therapistid, userid, userhealthrecord, mental_analysis, medication, Prescription], 
+    (err, result) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      return res.status(201).json({
+        message: 'Diagnosis added successfully',
+        id: result.insertId
+      });
+    }
+  );
+});
+
+// Get user's prescriptions
 app.get('/api/prescriptions/:userid', (req, res) => {
   const { userid } = req.params;
   
@@ -581,7 +693,7 @@ app.get('/api/prescriptions/:userid', (req, res) => {
   });
 });
 
-// Get all community posts from second file
+// Get all community posts
 app.get('/api/community-posts', (req, res) => {
   try {
     // Query to get all posts with user information
@@ -612,7 +724,7 @@ app.get('/api/community-posts', (req, res) => {
   }
 });
 
-// Create a new post from second file
+// Create a new post
 app.post('/api/community-posts', (req, res) => {
   try {
     const { userid, caption } = req.body;
@@ -670,7 +782,7 @@ app.post('/api/community-posts', (req, res) => {
   }
 });
 
-// Like/unlike a post from second file
+// Like/unlike a post
 app.put('/api/community-posts/:postId/like', (req, res) => {
   try {
     const { postId } = req.params;
@@ -705,7 +817,7 @@ app.put('/api/community-posts/:postId/like', (req, res) => {
   }
 });
 
-// Add a comment to a post from second file
+// Add a comment to a post
 app.post('/api/community-posts/:postId/comment', (req, res) => {
   try {
     const { postId } = req.params;
@@ -780,7 +892,7 @@ app.post('/api/community-posts/:postId/comment', (req, res) => {
   }
 });
 
-// Get a specific user's posts from second file
+// Get a specific user's posts
 app.get('/api/community-posts/user/:userid', (req, res) => {
   try {
     const { userid } = req.params;

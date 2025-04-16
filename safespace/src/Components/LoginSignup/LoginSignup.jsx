@@ -1,41 +1,64 @@
 // LoginSignup.jsx
-import React, { useState } from 'react';
-import './LoginSignup.css';
-import userIcon from '../Assets/user.png';
-import emailIcon from '../Assets/email.png';
-import passwordIcon from '../Assets/password.png';
+import React, { useState } from "react";
+import "./LoginSignup.css";
+import userIcon from "../Assets/user.png";
+import emailIcon from "../Assets/email.png";
+import passwordIcon from "../Assets/password.png";
 
 const indianStates = [
-  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-  'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand',
-  'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
-  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-  'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-  'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi'
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Delhi",
 ];
 
 const LoginSignup = ({ onNavigate }) => {
   const [action, setAction] = useState("Login");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [loginData, setLoginData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const [signupData, setSignupData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    contact: '',
-    dob: '',
-    gender: '',
-    state: '',
-    role: '',
-    specialization: '',
-    experience: '',
-    fee: ''
+    name: "",
+    email: "",
+    password: "",
+    contact: "",
+    dob: "",
+    gender: "",
+    state: "",
+    role: "",
+    specialization: "",
+    experience: "",
+    fee: "",
   });
 
   const handleLoginChange = (e) => {
@@ -51,26 +74,31 @@ const LoginSignup = ({ onNavigate }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData)
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || "Login failed");
       }
-      
-      // Store user data in localStorage or context
-      localStorage.setItem('userData', JSON.stringify(data.user));
-      
+
+      // Store user data in localStorage, ensuring role is included
+      const userData = {
+        ...data.user,
+        role: data.user.role || "user", // Ensure role exists
+      };
+
+      localStorage.setItem("userData", JSON.stringify(userData));
+
       // Navigate to dashboard
-      onNavigate('dashboard');
+      onNavigate("dashboard");
     } catch (error) {
       setError(error.message);
     } finally {
@@ -81,49 +109,58 @@ const LoginSignup = ({ onNavigate }) => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-    
+    setError("");
+
     try {
       // Validate fields based on role
-      if (signupData.role === 'therapist') {
-        if (!signupData.specialization || !signupData.experience || !signupData.fee) {
-          throw new Error('Please complete all therapist fields');
+      if (signupData.role === "therapist") {
+        if (
+          !signupData.specialization ||
+          !signupData.experience ||
+          !signupData.fee
+        ) {
+          throw new Error("Please complete all therapist fields");
         }
       }
-      
-      const response = await fetch('http://localhost:3001/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(signupData)
+
+      const response = await fetch("http://localhost:3001/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signupData),
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.error || 'Signup failed');
+        throw new Error(data.error || "Signup failed");
       }
-      
+
       // Automatically login after successful signup
-      const loginResponse = await fetch('http://localhost:3001/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const loginResponse = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: signupData.email,
-          password: signupData.password
-        })
+          password: signupData.password,
+        }),
       });
-      
+
       const loginData = await loginResponse.json();
-      
+
       if (!loginResponse.ok) {
-        throw new Error(loginData.error || 'Auto-login failed');
+        throw new Error(loginData.error || "Auto-login failed");
       }
-      
-      // Store user data in localStorage or context
-      localStorage.setItem('userData', JSON.stringify(loginData.user));
-      
+
+      // Store user data in localStorage, ensuring role is included from signup
+      const userData = {
+        ...loginData.user,
+        role: signupData.role || loginData.user.role || "user", // Ensure the selected role is stored
+      };
+
+      localStorage.setItem("userData", JSON.stringify(userData));
+
       // Navigate to dashboard
-      onNavigate('dashboard');
+      onNavigate("dashboard");
     } catch (error) {
       setError(error.message);
     } finally {
@@ -176,10 +213,16 @@ const LoginSignup = ({ onNavigate }) => {
           </div>
 
           <div className="submit-container">
-            <div className={action === "Sign Up" ? "submit" : "submit gray"} onClick={() => setAction("Sign Up")}>
+            <div
+              className={action === "Sign Up" ? "submit" : "submit gray"}
+              onClick={() => setAction("Sign Up")}
+            >
               Sign Up
             </div>
-            <div className={action === "Login" ? "submit" : "submit gray"} onClick={handleLogin}>
+            <div
+              className={action === "Login" ? "submit" : "submit gray"}
+              onClick={handleLogin}
+            >
               Login
             </div>
           </div>
@@ -205,7 +248,7 @@ const LoginSignup = ({ onNavigate }) => {
               placeholder="Contact Number (+91)"
               value={signupData.contact}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '');
+                const value = e.target.value.replace(/\D/g, "");
                 if (value.length <= 10) {
                   setSignupData({ ...signupData, contact: value });
                 }
@@ -249,7 +292,9 @@ const LoginSignup = ({ onNavigate }) => {
             >
               <option value="">Select State</option>
               {indianStates.map((state, idx) => (
-                <option key={idx} value={state}>{state}</option>
+                <option key={idx} value={state}>
+                  {state}
+                </option>
               ))}
             </select>
           </div>
@@ -268,7 +313,7 @@ const LoginSignup = ({ onNavigate }) => {
             </select>
           </div>
 
-          {signupData.role === 'therapist' && (
+          {signupData.role === "therapist" && (
             <div className="therapist-fields">
               <div className="input select-input">
                 <img src={userIcon} alt="specialization" />
@@ -280,10 +325,14 @@ const LoginSignup = ({ onNavigate }) => {
                 >
                   <option value="">Select Specialization</option>
                   <option value="Family Counseling">Family Counseling</option>
-                  <option value="Addiction Counseling">Addiction Counseling</option>
+                  <option value="Addiction Counseling">
+                    Addiction Counseling
+                  </option>
                   <option value="Trauma Therapy">Trauma Therapy</option>
                   <option value="Couples Therapy">Couples Therapy</option>
-                  <option value="Cognitive Behavioral Therapy">Cognitive Behavioral Therapy</option>
+                  <option value="Cognitive Behavioral Therapy">
+                    Cognitive Behavioral Therapy
+                  </option>
                   <option value="Art Therapy">Art Therapy</option>
                   <option value="Psychoanalysis">Psychoanalysis</option>
                 </select>
@@ -335,10 +384,16 @@ const LoginSignup = ({ onNavigate }) => {
           </div>
 
           <div className="submit-container">
-            <div className={action === "Login" ? "submit" : "submit gray"} onClick={() => setAction("Login")}>
+            <div
+              className={action === "Login" ? "submit" : "submit gray"}
+              onClick={() => setAction("Login")}
+            >
               Login
             </div>
-            <div className={action === "Sign Up" ? "submit" : "submit gray"} onClick={handleSignup}>
+            <div
+              className={action === "Sign Up" ? "submit" : "submit gray"}
+              onClick={handleSignup}
+            >
               Sign Up
             </div>
           </div>
