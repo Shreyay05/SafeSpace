@@ -9,8 +9,8 @@ const Appointments = () => {
   const [filter, setFilter] = useState('all'); // 'all', 'upcoming', 'past', 'cancelled'
 
   // Get user details from localStorage
-  const user = JSON.parse(localStorage.getItem('user')) || {};
-  const userId = user.userid;
+  const userData = JSON.parse(localStorage.getItem('userData')) || {};
+  const userId = userData.userid;
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -106,6 +106,10 @@ const Appointments = () => {
     return `${month} ${day}, ${year} ${hours}:${minutes} ${ampm}`;
   };
 
+  const navigateToDashboard = () => {
+    window.location.href = '/dashboard';
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center h-64">
       <div className="text-center p-6">
@@ -135,6 +139,21 @@ const Appointments = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Back to Dashboard Button */}
+      <a 
+        href="/dashboard" 
+        onClick={(e) => {
+          e.preventDefault();
+          navigateToDashboard();
+        }}
+        className="back-to-dashboard-btn mb-4 inline-flex items-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
+        Back to Dashboard
+      </a>
+    
       <h1 className="text-2xl font-bold mb-6">Your Appointments</h1>
       
       <div className="mb-6">

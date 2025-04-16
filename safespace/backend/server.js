@@ -1070,6 +1070,154 @@ app.get('/api/appointments/:userid', (req, res) => {
   });
 });
 
+// Get emergency helplines
+app.get('/api/emergency-helplines', (req, res) => {
+  try {
+    const query = 'SELECT * FROM emergency_helpline';
+    
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      return res.json({
+        emergency_helplines: results
+      });
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+// Get state-specific hospital information
+app.get('/api/state-hospitals/:state', (req, res) => {
+  try {
+    const { state } = req.params;
+    
+    const query = 'SELECT * FROM state_hospitals WHERE state = ?';
+    
+    db.query(query, [state], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Hospital data not found for this state' });
+      }
+      
+      return res.json({
+        state_hospital: results[0]
+      });
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get user's emergency contacts
+app.get('/api/emergency-contacts/:userid', (req, res) => {
+  try {
+    const { userid } = req.params;
+    
+    const query = 'SELECT * FROM user_emergency_contacts WHERE userid = ?';
+    
+    db.query(query, [userid], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      if (results.length === 0) {
+        return res.json({ contacts: [] });
+      }
+      
+      return res.json({
+        contacts: results
+      });
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Add user emergency contact
+app.post('/api/emergency-contacts', (req, res) => {
+  try {
+    const { userid, name, contact_name, relation, contact_number } = req.body;
+    
+    if (!userid || !contact_name || !relation || !contact_number) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    // Check if the user exists
+    db.query('SELECT * FROM user WHERE userid = ?', [userid], (userErr, userResults) => {
+      if (userErr) {
+        console.error('Database error:', userErr);
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      if (userResults.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      
+      // Check if contact number already exists
+      db.query('SELECT * FROM user_emergency_contacts WHERE contact_number = ?', [contact_number], (contactErr, contactResults) => {
+        if (contactErr) {
+          console.error('Database error:', contactErr);
+          return res.status(500).json({ error: 'Database error' });
+        }
+        
+        if (contactResults.length > 0) {
+          return res.status(400).json({ error: 'This contact number is already used as an emergency contact' });
+        }
+        
+        // Insert emergency contact
+        const insertQuery = `
+          INSERT INTO user_emergency_contacts (
+            userid,
+            name,
+            contact_name,
+            relation,
+            contact_number
+          ) VALUES (?, ?, ?, ?, ?)
+        `;
+        
+        db.query(
+          insertQuery,
+          [userid, name, contact_name, relation, contact_number],
+          (insertErr, result) => {
+            if (insertErr) {
+              console.error('Error adding emergency contact:', insertErr);
+              return res.status(500).json({ error: 'Error adding emergency contact' });
+            }
+            
+            // Return the created contact
+            const newContact = {
+              userid,
+              name,
+              contact_name,
+              relation,
+              contact_number
+            };
+            
+            return res.status(201).json({
+              message: 'Emergency contact added successfully',
+              contact: newContact
+            });
+          }
+        );
+      });
+    });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

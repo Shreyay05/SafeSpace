@@ -1,288 +1,321 @@
 /* Appointments page styles */
 .container {
-    width: 100%;
-    min-height: 100vh;
-    background: rgba(170, 148, 172, 0.3);
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(170, 148, 172, 0.3);
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Back to dashboard button styles */
+.back-to-dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #aa94ac;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-dashboard-btn:hover {
+  background-color: #8f6b8f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-to-dashboard-btn svg {
+  margin-right: 8px;
+}
+
+.text-2xl {
+  font-size: 32px;
+  color: #2d2d2d;
+  margin-bottom: 10px;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.mb-6 {
+  margin-bottom: 30px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mr-2 {
+  margin-right: 10px;
+}
+
+.font-medium {
+  font-weight: 600;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.gap-2 {
+  gap: 10px;
+}
+
+.px-4 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.py-2 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.bg-blue-600 {
+  background-color: #aa94ac;
+}
+
+.text-white {
+  color: white;
+}
+
+.bg-gray-200 {
+  background-color: #e9ecef;
+}
+
+.grid {
+  display: grid;
+}
+
+.gap-4 {
+  gap: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-6 {
+  padding: 24px;
+}
+
+.bg-gray-100 {
+  background-color: #f8f9fa;
+}
+
+.border {
+  border: 1px solid #ddd;
+}
+
+.rounded-lg {
+  border-radius: 12px;
+}
+
+.p-4 {
+  padding: 16px;
+}
+
+.shadow-sm {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
+.text-gray-600 {
+  color: #555;
+}
+
+.mt-2 {
+  margin-top: 10px;
+}
+
+.py-1 {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.px-2 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.bg-green-500 {
+  background-color: #4CAF50;
+}
+
+.bg-blue-500 {
+  background-color: #2196F3;
+}
+
+.bg-red-500 {
+  background-color: #F44336;
+}
+
+.bg-yellow-500 {
+  background-color: #FFC107;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+
+.bg-blue-600 {
+  background-color: #aa94ac;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: #8f6b8f;
+}
+
+.bg-red-600 {
+  background-color: #e53935;
+}
+
+.hover\:bg-red-700:hover {
+  background-color: #c62828;
+}
+
+.bg-purple-600 {
+  background-color: #8e24aa;
+}
+
+.hover\:bg-purple-700:hover {
+  background-color: #6a1b9a;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* SVG icon sizes */
+.h-5 {
+  height: 20px;
+}
+
+.w-5 {
+  width: 20px;
+}
+
+/* Loading spinner */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error messaging */
+.bg-red-100 {
+  background-color: #f8d7da;
+}
+
+.border-red-400 {
+  border-color: #f5c6cb;
+}
+
+.text-red-700 {
+  color: #721c24;
+}
+
+.px-3 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.py-3 {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Filter buttons hover effect */
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Appointment card hover effect */
+.border:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Media queries for responsiveness */
+@media (min-width: 768px) {
+  .md\:flex-row {
+    flex-direction: row;
   }
 
-  .text-2xl {
-    font-size: 32px;
-    color: 
-#2d2d2d;
-    margin-bottom: 10px;
+  .md\:mt-0 {
+    margin-top: 0;
   }
+}
 
-  .font-bold {
-    font-weight: bold;
-  }
-
-  .mb-6 {
-    margin-bottom: 30px;
-  }
-
-  .mr-2 {
-    margin-right: 10px;
-  }
-
-  .font-medium {
-    font-weight: 600;
-  }
-
-  .flex {
-    display: flex;
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
   }
 
   .flex-wrap {
-    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .gap-2 {
-    gap: 10px;
-  }
-
-  .px-4 {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .py-2 {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-
-  .rounded {
-    border-radius: 8px;
-  }
-
-  .bg-blue-600 {
-    background-color: 
-#aa94ac;
-  }
-
-  .text-white {
-    color: white;
-  }
-
-  .bg-gray-200 {
-    background-color: 
-#e9ecef;
-  }
-
-  .grid {
-    display: grid;
-  }
-
-  .gap-4 {
-    gap: 20px;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .p-6 {
-    padding: 24px;
-  }
-
-  .bg-gray-100 {
-    background-color: 
-#f8f9fa;
+  button {
+    margin-bottom: 10px;
   }
 
   .border {
-    border: 1px solid #ddd;
+    padding: 15px;
   }
 
-  .rounded-lg {
-    border-radius: 12px;
+  .back-to-dashboard-btn {
+    padding: 8px 12px;
   }
-
-  .p-4 {
-    padding: 16px;
-  }
-
-  .shadow-sm {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-
-  .bg-white {
-    background-color: white;
-  }
-
-  .flex-col {
-    flex-direction: column;
-  }
-
-  .justify-between {
-    justify-content: space-between;
-  }
-
-  .text-lg {
-    font-size: 18px;
-  }
-
-  .text-gray-600 {
-    color: #555;
-  }
-
-  .mt-2 {
-    margin-top: 10px;
-  }
-
-  .py-1 {
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-
-  .px-2 {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .bg-green-500 {
-    background-color: 
-#4CAF50;
-  }
-
-  .bg-blue-500 {
-    background-color: 
-#2196F3;
-  }
-
-  .bg-red-500 {
-    background-color: 
-#F44336;
-  }
-
-  .bg-yellow-500 {
-    background-color: 
-#FFC107;
-  }
-
-  .mt-4 {
-    margin-top: 16px;
-  }
-
-  .gap-2 {
-    gap: 8px;
-  }
-
-  .bg-blue-600 {
-    background-color: 
-#aa94ac;
-  }
-
-  .hover\:bg-blue-700:hover {
-    background-color: 
-#8f6b8f;
-  }
-
-  .bg-red-600 {
-    background-color: 
-#e53935;
-  }
-
-  .hover\:bg-red-700:hover {
-    background-color: 
-#c62828;
-  }
-
-  .bg-purple-600 {
-    background-color: 
-#8e24aa;
-  }
-
-  .hover\:bg-purple-700:hover {
-    background-color: 
-#6a1b9a;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  /* Loading spinner */
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  /* Error messaging */
-  .bg-red-100 {
-    background-color: 
-#f8d7da;
-  }
-
-  .border-red-400 {
-    border-color: 
-#f5c6cb;
-  }
-
-  .text-red-700 {
-    color: 
-#721c24;
-  }
-
-  .px-3 {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .py-3 {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  /* Filter buttons hover effect */
-  button:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-  }
-
-  /* Appointment card hover effect */
-  .border:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    transition: box-shadow 0.3s ease;
-  }
-
-  /* Media queries for responsiveness */
-  @media (min-width: 768px) {
-    .md\:flex-row {
-      flex-direction: row;
-    }
-
-    .md\:mt-0 {
-      margin-top: 0;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      padding: 20px;
-    }
-
-    .flex-wrap {
-      justify-content: center;
-    }
-
-    button {
-      margin-bottom: 10px;
-    }
-
-    .border {
-      padding: 15px;
-    }
-  }
+}
